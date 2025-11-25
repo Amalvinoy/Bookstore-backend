@@ -1,12 +1,22 @@
 const  express = require('express');
 const bookController = require('../controllers/bookController');
 const userController = require('../controllers/userController');
-//create router
+const jwtMiddleware = require('../middlewares/jwtMiddleware');
+const multerMiddleware = require('../middlewares/multerMiddleware');
+const multerConfig = require('../middlewares/multerMiddleware');
+//2.create router
 const router = express.Router();
 
-//import controller
-router.post('/api/addBook', bookController.addBook);
+//3.define routes
+
+//Register User
 router.post('/api/registerUser', userController.registerUser);
+//Login User
 router.post('/api/loginUser', userController.loginUser);
+
+//Google Login
+router.post('/api/google-login', userController.googleAuth);
+
+router.post('/api/addbook',jwtMiddleware,multerMiddleware.array('uploadImage',3), bookController.addBook);
 
 module.exports = router;

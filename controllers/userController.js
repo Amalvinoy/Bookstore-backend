@@ -56,4 +56,32 @@ exports.loginUser = async (req, res) => {
   }
 };
 
-
+exports.googleAuth=async(req,res)=>{
+    const {email,password,username,profile}=req.body;
+    try{
+        const existingUser = await Users.findOne({ email });
+        if (existingUser) {
+          // User exists, proceed to login
+          const token = jwt.sign(
+            { userMail: existingUser.email, role: existingUser.role },
+            process.env.jwtKey)
+          console.log(token);
+          res.status(200).json({ message: "Login successful", user: existingUser, token });
+        }
+        else {
+          // User does not exist, create a new user
+          const newUser = new Users({ username, email, password, profile });
+          await newUser.save(); //save to database
+          const token = jwt.sign(
+            { userMail: newUser.email, role: newUser.role },
+            process.env.jwtKey
+          );
+          console.log(token);
+          res.status(201).json({ message: "User registered successfully", user: newUser, token });
+        }
+    }
+    catch(error){
+        console.error("Error during Google authentication:", error);
+        res.status(500).json({ message: "Server error" });
+    }
+};
