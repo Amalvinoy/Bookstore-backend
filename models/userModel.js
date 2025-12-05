@@ -16,11 +16,11 @@ const userSchema = new mongoose.Schema({
     },
     profile:{
         type: String,
-       // required: false
+        required: false
     },
     role:{
         type: String,
-       // required: false
+        required: false
     }
 });
 

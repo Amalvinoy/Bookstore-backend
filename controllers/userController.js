@@ -85,3 +85,15 @@ exports.googleAuth=async(req,res)=>{
         res.status(500).json({ message: "Server error" });
     }
 };
+
+//get all users - admin
+
+exports.getAllUsersAdmin = async (req,res)=>{
+    console.log("Inside Get All Users for Admin");
+    try{
+        const users = await Users.find() 
+        res.status(200).json(users);
+    } catch (err) {
+        res.status(500).json(err);
+    }
+}
